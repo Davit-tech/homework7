@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include("../partials/head.ejs") %>
+
+<body>
+<nav>
+    <ul>
+
+        <li><a href="/post/posts">Posts</a></li>
+        <li><a href="/post/createPost">New Post</a></li>
+        <li><a href="/user/users">See Users List</a></li>
+
+
+
+    </ul>
+</nav>
+
+<article id="user-info">
+
+</article>
+<a href="/user/editProfile">
+    Edit Profile
+</a>
+
+<a href="#" class="logout"> log Out</a>
+<script src="/js/auth/userChecker.js"></script>
+<script src="/js/users/profile.js"></script>
+
+
+</body>
+</html>
+
+
+

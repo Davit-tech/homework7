@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head.ejs') %>
+<body>
+<nav>
+    <ul>
+
+        <li><a href="/post/posts">Posts</a></li>
+        <li><a href="/post/createPost">New Post</a></li>
+        <li><a href="/user/users">See Users List</a></li>
+        <li><a href="/user/profile">GO to my profile</a></li>
+            <li><a href="#" class="logout"> log Out</a></li>
+
+    </ul>
+</nav>
+
+<h1>Posts:</h1>
+
+<div id="user-posts"></div>
+<div id="pagination"></div>
+
+<div id="pagination-container" class="pagination"></div>
+
+
+<script src="/js/posts/postsChecker.js"></script>
+
+<script src="/js/posts//posts.js"></script>
+
+
+
+</body>
+</html>
