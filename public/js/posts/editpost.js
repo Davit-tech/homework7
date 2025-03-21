@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             try {
 
-                const response = await fetch(`/post/posts/${postId}/edit/data`, {
+                const response = await fetch(`/post/posts/${postId}/data`, {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 if (response.ok) {
 
-                    window.location.href = `../../posts`;
+                    window.location.href = `/post/posts`;
                 } else {
                     console.error("Failed to update post", await response.json());
                 }

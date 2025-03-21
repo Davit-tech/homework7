@@ -48,7 +48,7 @@
             const postId = event.target.getAttribute("data-id");
             if (confirm("Are you sure you want to delete this post?")) {
                 try {
-                    const response = await fetch(`/post/posts/${postId}`, {
+                    const response = await fetch(`/post/posts/${postId}/data`, {
                         method: "DELETE",
                         headers: { token },
                     });

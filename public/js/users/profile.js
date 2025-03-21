@@ -3,13 +3,13 @@
     const userData = JSON.parse(localStorage.getItem("user"));
 
     if (userInfo && userData) {
-        const {id,firstName, lastName, email} = userData.user;
+        const {id,first_name, last_name, email} = userData.user;
 
         userInfo.innerHTML = `
             <pre class="userdata">
-First Name: ${firstName}
+First Name: ${first_name}
 id : ${id}
-Last Name: ${lastName}
+Last Name: ${last_name}
 Email: ${email}
  
 

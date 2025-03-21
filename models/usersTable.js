@@ -1,4 +1,4 @@
-import db from "../clients/db.mysql.js"
+import db from "../clients/db.mysql.js";
 import helpers from "../utils/helpers.js";
 
 export default {
@@ -29,20 +29,17 @@ export default {
     },
     async findAll() {
         const [raws] = await db.query(`
-
             SELECT *
-            FROM users`)
+            FROM users`);
         return raws;
     },
-    async createUsers(firstName, lastName, email, password) {
-
-
+    async createUsers(first_name, last_name, email, password) {
         try {
             const hashedPassword = helpers.passwordHash(password);
             const [raws] = await db.query(`
-                INSERT INTO users (firstName, lastName, email, password)
+                INSERT INTO users (first_name, last_name, email, password)
                 VALUES (?, ?, ?, ?)
-            `, [firstName, lastName, email, hashedPassword]);
+            `, [first_name, last_name, email, hashedPassword]);
             console.log("Successfully registered");
             return raws;
 
@@ -52,6 +49,4 @@ export default {
         }
 
     },
-
-
-}
+};

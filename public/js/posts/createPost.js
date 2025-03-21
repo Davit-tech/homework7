@@ -14,14 +14,14 @@ if (createPostForm) {
         }
         if (postDate > currentDate) {
             alert('The post date cannot be in the future.');
-        return
+        return;
 
         }
         const formData = new FormData(this);
-        const data = Object.fromEntries(formData.entries())
+        const data = Object.fromEntries(formData.entries());
 
         try {
-            const response = await fetch("/post/createPost/data", {
+            const response = await fetch("/post/posts/create/data", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -50,14 +50,14 @@ if (createPostForm) {
             }
         } catch (err) {
             console.log( err);
-        }
+        };
 
-    }
+    };
 
 }
 const authorName = document.querySelector("#author-input");
   const userName = JSON.parse(localStorage.getItem("user"));
-authorName.value =userName.user.firstName
+authorName.value =userName.user.first_name;
 
 
 let logout = document.querySelector(".logout");

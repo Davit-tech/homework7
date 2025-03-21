@@ -4,53 +4,51 @@ import authUtils from "../utils/authUtils.js";
 
 
 export default {
-    getLogin: async (req, res) => {
+    async getLogin(req, res) {
         res.render("users/login", {title: "Login"});
     },
 
-    login: async (req, res, next) => {
+    async login(req, res, next) {
         const {password, email} = req.body;
+        try {
+            const existingUser = await Users.findByEmail(email);
+            if (!existingUser) {
+                return res.status(422).json({
+                    message: "User not found",
+                    success: false,
+                    messageType: "error",
+                });
+            }
+            const result = authUtils.validatePasswordAndGenerateToken(existingUser, password);
 
+            if (result.success) {
+                return res.status(200).json({
+                    token: result.token,
+                    expiresIn: result.expiresIn,
+                    success: true,
+                    message: "Login successful!",
+                    messageType: "success",
+                    userId: existingUser.id,
+                });
+            }
 
-        const existingUser = await Users.findByEmail(email);
-
-
-        if (!existingUser) {
-            return res.status(422).json({
-                message: "User not found",
+            return res.status(401).json({
                 success: false,
                 messageType: "error",
+                message: result.message,
             });
+        } catch (err) {
+            return next(createError(500, `Server error. Please try again later: ${err.message}`));
         }
 
 
-        const result = authUtils.validatePasswordAndGenerateToken(existingUser, password);
-
-
-        if (result.success) {
-            return res.status(200).json({
-                token: result.token,
-                expiresIn: result.expiresIn,
-                success: true,
-                message: "Login successful!",
-                messageType: "success",
-                userId: existingUser.id,
-            });
-        }
-
-
-        return res.status(401).json({
-            success: false,
-            messageType: "error",
-            message: result.message,
-        });
     },
 
-    getRegister: async (req, res) => {
+    async getRegister(req, res) {
         res.render("users/register", {title: "register"});
     },
 
-    register: async (req, res, next) => {
+    async register(req, res, next) {
         const {firstname, lastname, email, password} = req.body;
 
         const existingUser = await Users.findByEmail(email);
@@ -71,7 +69,7 @@ export default {
                 messageType: "success",
             });
         } catch (err) {
-            return next(createError(500, "An error occurred during registration"));
+            return next(createError(500, `An error occurred during registration${err.message}`));
         }
     },
 
@@ -81,34 +79,41 @@ export default {
         });
     },
 
-    usersListData: async (req, res, next) => {
+    async usersListData(req, res, next) {
+        try {
+            const users = await Users.findAll();
+
+            res.json({
+                users,
+            });
+        } catch (err) {
+            return next(createError(500, `Server error${err.message}`));
+        }
 
 
-        const users = await Users.findAll()
-
-        res.json({
-            users,
-        });
     },
 
-    getUserProfileView: async (req, res, next) => {
+    async getUserProfileView(req, res) {
         res.render("users/userProfile", {
             title: "User Profile",
         });
     },
 
-    getUserProfileData: async (req, res, next) => {
+    async getUserProfileData(req, res, next) {
         const id = req.userId;
 
-
-        const user = await Users.findById(id);
-        console.log(user);
-        if (!user) {
-            return next(createError(404, "User not found"));
+        try {
+            const user = await Users.findById(id);
+            if (!user) {
+                return next(createError(404, "User not found"));
+            }
+            res.json({
+                user,
+            });
+        } catch (err) {
+            return next(createError(500, `Server error${err.message}`));
         }
 
-        res.json({
-            user,
-        });
+
     },
 };

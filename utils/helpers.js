@@ -1,8 +1,5 @@
 import CryptoJS from "crypto-js";
 import md5 from "md5";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 
 const {USER_PASSWORD_SECRET, USER_AUTH_SECRET} = process.env;
@@ -21,5 +18,5 @@ export default {
         const bytes = CryptoJS.AES.decrypt(ciphertext, secret);
         return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
     }
-}
+};
 

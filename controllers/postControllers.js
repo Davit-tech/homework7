@@ -1,30 +1,27 @@
-
 import createError from "http-errors";
 import Posts from "../models/postsTable.js";
 
 
 const title = "createPOst";
 export default {
-    getPostsView: async (req, res) => {
+    async getPostsView(req, res) {
         const title = "Posts";
-
         res.render("posts/posts", {
             title,
         });
     },
 
-    getPostsData: async (req, res) => {
+    async getPostsData(req, res) {
         try {
             const page = parseInt(req.query.page) || 1;
-            const limit = parseInt(req.query.limit) || 5;
+            const limit = parseInt(req.query.limit) || 4;
             const offset = (page - 1) * limit;
+            console.log(req.query);
 
             const totalPosts = await Posts.countPosts();
             const totalPages = Math.ceil(totalPosts / limit);
 
             const posts = await Posts.findPaginatedPosts(offset, limit);
-
-
             res.json({
                 posts,
                 totalPages,
@@ -32,17 +29,14 @@ export default {
             });
         } catch (error) {
             console.error("Error fetching posts data:", error);
-            res.status(500).json({message: "Error fetching posts data"});
+            res.status(500).json({message: `Error fetching posts data${error.message}`});
         }
     }
     ,
-    getCreatePostView: (req, res) => {
+    async getCreatePostView(req, res) {
         res.render("posts/createPost", {title});
     },
-    getCreatePostData: async (req, res) => {
-        res.json({message: "Post creation is available"});
-    },
-    createPostData: async (req, res, next) => {
+    async createPostData(req, res, next) {
         const {title, author, text, date} = req.body;
         const id = req.userId;
 
@@ -55,11 +49,10 @@ export default {
                 posts,
             });
         } catch (error) {
-            console.error("Error saving post:", error);
-            return next(createError(500, "Error saving post"));
+            return next(createError(500, `Error saving post${error.message}`));
         }
     },
-    getEditPost: async (req, res, next) => {
+    async getEditPost(req, res, next) {
         const {id} = req.params;
 
         try {
@@ -76,17 +69,14 @@ export default {
         }
     }
     ,
-    editPost: async (req, res, next) => {
+    async updatePost(req, res, next) {
         const {id} = req.params;
         const {title, author, text, date} = req.body;
 
-        const post = await Posts.findById(id);
-        if (!post) {
-            return next(createError(404, "Post not found"));
-        }
-
 
         try {
+            const post = await Posts.findById(id);
+            if (!post) return next(createError(404, "Post not found"));
             await Posts.editPostById(id, title, author, text, date);
 
 
@@ -95,11 +85,10 @@ export default {
 
             });
         } catch (error) {
-            console.error("Error saving the post:", error);
-            return next(createError(500, "Error saving the post"));
+            return next(createError(500, `Error saving the post${error.message}`));
         }
     },
-    deletePost: async (req, res, next) => {
+    async deletePost(req, res, next) {
         const {id} = req.params;
 
         try {
@@ -109,13 +98,11 @@ export default {
             if (!post) {
                 return res.status(404).json({message: "Post not found"});
             }
-
-
             await Posts.deletePostById(id);
 
             res.status(204).send();
         } catch (error) {
-            return next(createError(500, "Error deleting post"));
+            return next(createError(500, `Error deleting post${error.message}`));
         }
     },
 

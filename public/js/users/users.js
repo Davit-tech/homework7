@@ -7,8 +7,8 @@
         userData.users.forEach(user => {
             userHtml += `
                 <pre class="userdata">
-First Name: ${user.firstName}
-Last Name: ${user.lastName}
+First Name: ${user.first_name}
+Last Name: ${user.last_name}
 Email: ${user.email}
                 </pre>
             `;
